@@ -4,6 +4,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
+const session = require('express-session')
 
 const environment = process.env.NODE_ENV
 const stage = require('./config')[environment]
@@ -16,7 +17,7 @@ mongoose.connect(
   process.env.MONGO_LOCAL_CONN,
   { useNewUrlParser: true, useCreateIndex: true },
   err => {
-    if (!err) return console.log('\x1b[32m' + '[app.js] Connected to db!')
+    if (!err) return console.log('\x1b[32m' + '[app.js] connected to db!')
   }
 )
 

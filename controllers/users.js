@@ -2,24 +2,52 @@ const jwt = require('jsonwebtoken')
 
 const User = require('../models/users')
 
+const signToken = user => jwt.sign({ id: user.id }, process.env.JWT_SECRET)
+
 module.exports = {
   signUp: async (req, res) => {
-    const { email, password } = req.value.body
-    const foundUser = await User.findOne({ email })
-    if (foundUser) {
+    const { name, username, email, password } = req.value.body
+    const foundUserByEmail = await User.findOne({ email })
+    if (foundUserByEmail) {
       return res.status(403).json({ error: 'Email is already in use' })
     }
+    const foundUserByUsername = await User.findOne({ username })
+    if (foundUserByUsername) {
+      return res.status(403).json({ error: 'Username is already in use' })
+    }
 
-    const newUser = new User({ email, password })
-    await newUser.save()
+    const user = new User({ name, username, email, password })
+    await user.save()
 
-    const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET)
+    // Create a token
+    const token = signToken(newUser)
 
-    // TODO: Return a token
-    res.json({ token })
+    res.json({
+      user,
+      token,
+      success: true,
+      message: 'Registered a new account successfully'
+    })
   },
-  signIn: (req, res) => {
-    res.send('usersController -> signIn')
+  signIn: async (req, res) => {
+    const { username, password } = req.value.body
+
+    const user = await User.findOne({ username })
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'No user found with this username' })
+    }
+    if (user.password == password) {
+      const token = signToken(user)
+
+      res.json({ success: true, message: 'Logged in successfully', token })
+    } else {
+      res
+        .status(403)
+        .json({ success: false, message: 'Incorrect username or password' })
+    }
   },
   secret: (req, res) => {
     res.send('usersController -> secret')

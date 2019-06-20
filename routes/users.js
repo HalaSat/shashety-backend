@@ -1,12 +1,17 @@
 const router = require('express-promise-router')()
 
 const usersController = require('../controllers/users')
-const { schema, validateBody } = require('../utils')
+const {
+  validateBody,
+  signUpSchema,
+  signInSchema
+} = require('../middlewares/schema-helpers')
+const { checkToken } = require('../middlewares/token-helpers')
 
-router.route('/signup').post(validateBody(schema), usersController.signUp)
+router.route('/signup').post(validateBody(signUpSchema), usersController.signUp)
 
-router.route('/signin').post(usersController.signIn)
+router.route('/signin').post(validateBody(signInSchema), usersController.signIn)
 
-router.route('/secret').get(usersController.secret)
+router.route('/secret').get(checkToken, usersController.secret)
 
 module.exports = router
