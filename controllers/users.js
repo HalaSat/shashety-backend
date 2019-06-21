@@ -1,12 +1,16 @@
 const jwt = require('jsonwebtoken')
 
-const User = require('../models/users')
+const User = require('../models/User')
 
-const signToken = user => jwt.sign({ id: user.id }, process.env.JWT_SECRET)
+const signToken = user =>
+  jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
+    issuer: 'http://halasat.net'
+  })
 
 module.exports = {
   signUp: async (req, res) => {
     const { name, username, email, password } = req.value.body
+
     const foundUserByEmail = await User.findOne({ email })
     if (foundUserByEmail) {
       return res.status(403).json({ error: 'Email is already in use' })
@@ -20,7 +24,7 @@ module.exports = {
     await user.save()
 
     // Create a token
-    const token = signToken(newUser)
+    const token = signToken(user)
 
     res.json({
       user,
@@ -39,17 +43,14 @@ module.exports = {
         .status(404)
         .json({ success: false, message: 'No user found with this username' })
     }
+
     if (user.password == password) {
       const token = signToken(user)
-
       res.json({ success: true, message: 'Logged in successfully', token })
     } else {
       res
         .status(403)
         .json({ success: false, message: 'Incorrect username or password' })
     }
-  },
-  secret: (req, res) => {
-    res.send('usersController -> secret')
   }
 }

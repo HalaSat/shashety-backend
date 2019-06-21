@@ -17,7 +17,7 @@ module.exports = {
             .status(400)
             .json({ success: false, message: 'Token is not valid' })
         }
-        res.decoded = decoded
+        req.decoded = decoded
         next()
       })
     } else {

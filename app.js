@@ -4,7 +4,6 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
-const session = require('express-session')
 
 const environment = process.env.NODE_ENV
 const stage = require('./config')[environment]
@@ -31,6 +30,7 @@ app.use(bodyParser.json())
 
 // ROUTES
 app.use('/api/users', require('./routes/users'))
+app.use('/api/movies', require('./routes/movies'))
 
 // START THE APP
 app.listen(stage.port, () =>
