@@ -1,6 +1,6 @@
-const Schema = require('mongoose').Schema
+import { Schema } from 'mongoose'
 
-const movieSchema = new Schema({
+export default new Schema({
   id: {
     type: String,
     required: true,
@@ -20,5 +20,3 @@ const movieSchema = new Schema({
   rating: String,
   views: String
 })
-
-module.exports = movieSchema

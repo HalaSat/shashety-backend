@@ -1,18 +1,22 @@
-const router = require('express-promise-router')()
+import { Request, Response } from 'express'
+
+import ExpressPromiseRouter from 'express-promise-router'
 
 const usersController = require('../controllers/users')
-const {
+import {
   validateBody,
   signUpSchema,
   signInSchema
-} = require('../middlewares/schema-helpers')
+} from '../middlewares/schema-helpers'
+
+const router = ExpressPromiseRouter()
 
 router.route('/signup').post(validateBody(signUpSchema), usersController.signUp)
 
 router.route('/signin').post(validateBody(signInSchema), usersController.signIn)
 
-router.route('/:userId/favourites').get((req, res) => {
+router.route('/:userId/favourites').get((req: Request, res: Response) => {
   res.send(req.params)
 })
 
-module.exports = router
+export default router

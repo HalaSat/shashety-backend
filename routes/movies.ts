@@ -8,4 +8,4 @@ router
   .route('/favourite')
   .post(checkToken, validateBody(movieSchema), moviesController.favourite)
 
-module.exports = router
+export default router
