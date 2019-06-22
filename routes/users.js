@@ -11,4 +11,8 @@ router.route('/signup').post(validateBody(signUpSchema), usersController.signUp)
 
 router.route('/signin').post(validateBody(signInSchema), usersController.signIn)
 
+router.route('/:userId/favourites').get((req, res) => {
+  res.send(req.params)
+})
+
 module.exports = router

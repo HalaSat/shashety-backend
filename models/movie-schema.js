@@ -1,7 +1,6 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+const Schema = require('mongoose').Schema
 
-const movieSchema = Schema({
+const movieSchema = new Schema({
   id: {
     type: String,
     required: true,
@@ -11,7 +10,6 @@ const movieSchema = Schema({
     type: String,
     required: true
   },
-
   title: {
     type: String,
     required: true
@@ -23,6 +21,4 @@ const movieSchema = Schema({
   views: String
 })
 
-const Movie = mongoose.model('Movie', movieSchema)
-
-module.exports = Movie
+module.exports = movieSchema

@@ -42,14 +42,16 @@ module.exports = {
     username: usernameValidator,
     password: passwordValidator
   }),
-  movieSchema: Joi.object().keys({
-    id: Joi.string().required(),
-    username: Joi.string().required(),
-    title: Joi.string().required(),
-    poster: Joi.string(),
-    category: Joi.string(),
-    year: Joi.string(),
-    rating: Joi.string(),
-    views: Joi.string()
-  })
+  movieSchema: Joi.object()
+    .keys({
+      id: Joi.string().required(),
+      username: Joi.string().required(),
+      title: Joi.string().required(),
+      poster: Joi.string(),
+      category: Joi.string(),
+      year: Joi.string(),
+      rating: Joi.string(),
+      views: Joi.string()
+    })
+    .unknown(true)
 }
