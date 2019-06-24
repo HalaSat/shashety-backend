@@ -1,8 +1,6 @@
-import { Request, Response } from 'express'
-
 import ExpressPromiseRouter from 'express-promise-router'
 
-const usersController = require('../controllers/users')
+import { signUp, signIn } from '../controllers/users'
 import {
   validateBody,
   signUpSchema,
@@ -11,12 +9,8 @@ import {
 
 const router = ExpressPromiseRouter()
 
-router.route('/signup').post(validateBody(signUpSchema), usersController.signUp)
+router.route('/signup').post(validateBody(signUpSchema), signUp)
 
-router.route('/signin').post(validateBody(signInSchema), usersController.signIn)
-
-router.route('/:userId/favourites').get((req: Request, res: Response) => {
-  res.send(req.params)
-})
+router.route('/signin').post(validateBody(signInSchema), signIn)
 
 export default router

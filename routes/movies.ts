@@ -1,11 +1,16 @@
-const router = require('express-promise-router')()
-const moviesController = require('../controllers/movies')
+import ExpressPromiseRouter from 'express-promise-router'
 
-const { checkToken } = require('../middlewares/token-helpers')
-const { validateBody, movieSchema } = require('../middlewares/schema-helpers')
+import { favourite, getUserFavourites } from '../controllers/movies'
+
+import { checkToken } from '../middlewares/token-helpers'
+import { movieSchema, validateBody } from '../middlewares/schema-helpers'
+
+const router = ExpressPromiseRouter()
 
 router
   .route('/favourite')
-  .post(checkToken, validateBody(movieSchema), moviesController.favourite)
+  .post(checkToken, validateBody(movieSchema), favourite)
+
+router.route('/my-favourites').get(checkToken, getUserFavourites)
 
 export default router

@@ -1,13 +1,17 @@
 import { Request, Response } from 'express'
+import JWT from 'jsonwebtoken'
 
-const jwt = require('jsonwebtoken')
+import { User } from '../models/users'
+import { Document } from 'mongoose'
 
-const User = require('../models/User')
-
-const signToken = (user: any) =>
-  jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
-    issuer: 'http://halasat.net'
-  })
+const signToken = (user: Document) =>
+  JWT.sign(
+    { id: (user as any).id, username: (user as any).username },
+    process.env.JWT_SECRET || 'secret',
+    {
+      issuer: 'http://halasat.net'
+    }
+  )
 
 export const signUp = async (req: Request, res: Response) => {
   const { name, username, email, password } = (req as any).value.body
@@ -34,7 +38,10 @@ export const signUp = async (req: Request, res: Response) => {
     message: 'Registered a new account successfully'
   })
 }
-export const signIn = async (req: Request, res: Response) => {
+export const signIn = async (
+  req: Request,
+  res: Response
+): Promise<void | Response> => {
   const { username, password } = (req as any).value.body
 
   const user = await User.findOne({ username })
@@ -45,7 +52,7 @@ export const signIn = async (req: Request, res: Response) => {
       .json({ success: false, message: 'No user found with this username' })
   }
 
-  if (user.password == password) {
+  if ((user as any).password == password) {
     const token = signToken(user)
     res.json({ success: true, message: 'Logged in successfully', token })
   } else {

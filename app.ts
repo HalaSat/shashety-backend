@@ -1,16 +1,17 @@
-import dotenv from 'dotenv'
-
-dotenv.config()
-
 import express from 'express'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
+import dotenv from 'dotenv'
+
 import usersRoute from './routes/users'
 import moviesRoute from './routes/movies'
+import config from './config'
 
+// SETUP THE ENVIRONMENT
+dotenv.config()
 const environment = process.env.NODE_ENV || 'development'
-const stage = require('./config')[environment]
+const stage = (config as any)[environment]
 
 // CREATE THE APP
 const app = express()
@@ -35,6 +36,7 @@ app.use(bodyParser.json())
 // ROUTES
 app.use('/api/users', usersRoute)
 app.use('/api/movies', moviesRoute)
+app.post('/', (req, res) => res.send('hello'))
 
 // START THE APP
 app.listen(stage.port, () =>
