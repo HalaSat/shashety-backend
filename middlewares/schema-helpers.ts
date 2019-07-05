@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
+import { Response, NextFunction } from 'express'
 
-const Joi = require('@hapi/joi')
+import Joi from '@hapi/joi'
 
 // VALIDATORS
 const nameValidator = Joi.string()
@@ -20,7 +20,7 @@ const passwordValidator = Joi.string()
   .required()
 
 export const validateBody = (schema: any) => (
-  req: Request,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
@@ -29,11 +29,11 @@ export const validateBody = (schema: any) => (
     return res.status(400).json(result.error)
   }
 
-  if (!(req as any).value) {
-    ;(req as any).value = {}
+  if (req.value) {
+    req.value = {}
   }
 
-  ;(req as any).value.body = result.value
+  req.value.body = result.value
   next()
 }
 
@@ -51,7 +51,6 @@ export const signInSchema = Joi.object().keys({
 export const movieSchema = Joi.object()
   .keys({
     id: Joi.string().required(),
-    username: Joi.string().required(),
     title: Joi.string().required(),
     poster: Joi.string(),
     category: Joi.string(),

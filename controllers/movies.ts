@@ -3,9 +3,9 @@ import { Request, Response } from 'express'
 
 export const favourite = async (req: Request, res: Response) => {
   const movieBody = (req as any).value.body
-  const { username } = (req as any).decoded
+  const { id: userId } = (req as any).decoded
 
-  const movieId = movieBody.id + '-' + movieBody.username
+  const movieId = `${movieBody.id}-${userId}`
 
   const foundMovies = await FavouriteMovie.find({ movieId })
 
@@ -13,20 +13,20 @@ export const favourite = async (req: Request, res: Response) => {
     await FavouriteMovie.deleteMany({ movieId })
   }
 
-  const newMovie = new FavouriteMovie({ movieId, ...movieBody })
+  const newMovie = new FavouriteMovie({ movieId, userId, ...movieBody })
   await newMovie.save()
 
   res.json({
-    ...newMovie,
+    ...newMovie.toJSON(),
     success: true,
     message: `Added "${movieBody.title}" to favourites`
   })
 }
 
 export const getUserFavourites = async (req: Request, res: Response) => {
-  const { username } = (req as any).decoded
+  const { id: userId } = (req as any).decoded
 
-  const myFavourites = await FavouriteMovie.find({ username })
+  const movies = await FavouriteMovie.find({ userId })
 
-  res.json(myFavourites)
+  res.json(movies)
 }
