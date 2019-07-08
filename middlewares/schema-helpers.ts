@@ -29,7 +29,7 @@ export const validateBody = (schema: any) => (
     return res.status(400).json(result.error)
   }
 
-  if (req.value) {
+  if (!req.value) {
     req.value = {}
   }
 
@@ -59,3 +59,7 @@ export const movieSchema = Joi.object()
     views: Joi.string()
   })
   .unknown(true)
+
+export const removeMovieSchema = Joi.object().keys({
+  id: Joi.string().required()
+})

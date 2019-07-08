@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
+import { ObjectId } from 'bson'
 
 const movieSchema = new Schema({
   movieId: {
