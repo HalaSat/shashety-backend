@@ -5,7 +5,6 @@ import {
   getUserFavourites,
   removeFavourite
 } from '../controllers/movies'
-
 import { checkToken } from '../middlewares/token-helpers'
 import {
   movieSchema,

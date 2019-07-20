@@ -18,15 +18,15 @@ const app = express()
 
 // CONNECT TO DB
 mongoose.connect(
-  process.env.MONGO_LOCAL_CONN || 'mongodb://localhost:27017/shashety',
+  process.env.MONGO_LOCAL_CONN || 'mongodb://mongo:27017/shashety',
   { useNewUrlParser: true, useCreateIndex: true },
   err => {
     if (!err) return console.log('\x1b[32m' + '[app.js] connected to db!')
   }
 )
 
-// CHECK THE ENVIRONMENT
-if (environment == 'development') {
+// // CHECK THE ENVIRONMENT
+if (environment === 'development') {
   app.use(morgan('dev'))
 }
 

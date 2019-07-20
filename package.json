@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "build": "tsc",
-    "start:dev": "cross-env NODE_ENV=development nodemon --exec ts-node app.ts"
+    "start:dev": "cross-env NODE_ENV=development nodemon --exec ts-node app.ts",
+    "start": "tsc && node ./dist/app.js"
   },
   "keywords": [],
   "author": "Mohammed Salman",
