@@ -10,22 +10,27 @@ import config from './config'
 
 // SETUP THE ENVIRONMENT
 dotenv.config()
-const environment = process.env.NODE_ENV || 'development'
+const environment = process.env.NODE_ENV || 'production'
 const stage = (config as any)[environment]
-
+console.log('env: ' + environment)
 // CREATE THE APP
 const app = express()
 
 // CONNECT TO DB
+const dbUrl =
+  environment === 'development'
+    ? 'mongodb://localhost:27017/shashety'
+    : 'mongodb://mongo:27017/shashety'
+
 mongoose.connect(
-  process.env.MONGO_LOCAL_CONN || 'mongodb://mongo:27017/shashety',
+  dbUrl,
   { useNewUrlParser: true, useCreateIndex: true },
   err => {
     if (!err) return console.log('\x1b[32m' + '[app.js] connected to db!')
   }
 )
 
-// // CHECK THE ENVIRONMENT
+// CHECK THE ENVIRONMENT
 if (environment === 'development') {
   app.use(morgan('dev'))
 }
@@ -36,9 +41,10 @@ app.use(bodyParser.json())
 // ROUTES
 app.use('/api/users', usersRoute)
 app.use('/api/movies', moviesRoute)
-app.post('/', (req, res) => res.send('hello'))
+app.get('/', (req, res) => res.send('Welcome to Shashety'))
+app.get('/test', (req, res) => res.send('TEST'))
 
 // START THE APP
 app.listen(stage.port, () =>
-  console.log('\x1b[32m' + `[app.js] Listening to port ${stage.port}`)
+  console.log('\x1b[32m' + `[app.ts] Listening to port ${stage.port}`)
 )

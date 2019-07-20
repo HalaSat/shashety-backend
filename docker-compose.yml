@@ -6,9 +6,10 @@ services:
     restart: always
     build: .
     ports:
-      - '3000:3000'
+      - '80:80'
     links:
       - mongo
+    command: 'npx pm2 start ecosystem.config.js --no-daemon'
   mongo:
     container_name: mongo
     image: mongo
